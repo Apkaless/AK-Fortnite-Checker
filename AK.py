@@ -30,6 +30,13 @@ def check_domain(line):
     
     return False
 
+def check_combo_folder():
+    if os.path.exists('combo'):
+        return
+    else:
+        os.makedirs('combo')
+        return
+    
 def parse_1(text):
     dis_match = re.search(r'"lastName":"(.*?)","email":"(.*?)"', text)
     if dis_match:
@@ -861,20 +868,21 @@ start =  time.time()
 def main():
     global total_lines
     combo_file = os.listdir('combo')
-    combo = combo_file[-1]
-    with open(f'combo/{combo}', 'r', encoding='utf8', errors='ignore') as f:
-        accs = f.read().strip().splitlines()
-        clean_accs = list(dict().fromkeys(accs))
-        total_lines = len(clean_accs)
-        print(f'Loaded Combo: {total_lines}\n{rescolor}')
-        for acc in clean_accs:
-            if check_domain(acc):
-                th = Thread(target=check, args=(acc,))
-                threads.append(th)
-                time.sleep(0.002)
-                th.start()
-        for th in threads:
-            th.join()
+    if combo_file:
+        combo = combo_file[-1]
+        with open(f'combo/{combo}', 'r', encoding='utf8', errors='ignore') as f:
+            accs = f.read().strip().splitlines()
+            clean_accs = list(dict().fromkeys(accs))
+            total_lines = len(clean_accs)
+            print(f'Loaded Combo: {total_lines}\n{rescolor}')
+            for acc in clean_accs:
+                if check_domain(acc):
+                    th = Thread(target=check, args=(acc,))
+                    threads.append(th)
+                    time.sleep(0.002)
+                    th.start()
+            for th in threads:
+                th.join()
         
         while True:
             if len(toomany) > 0:
@@ -889,6 +897,9 @@ def main():
                     th.join()
             else:
                 break
+    else:
+        print(f'\n{red}No Combo File Found{white}\n')
+        input('')
 
     endt = time.time() - start
 
@@ -909,6 +920,7 @@ if __name__ == '__main__':
     spam = 0
     failed = 0
     checked = 0
+    check_combo_folder()
     banner()
     main()
     input(f'\n{blue}Checker Finished.... ')
