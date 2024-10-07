@@ -856,10 +856,6 @@ def banner():
 {lgreen}╚═╝  ╚═╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ''')
 
-accs_test = ['jcal1999@hotmail.com:Joni-cris1', 'aparecida772014@hotmail.com:Felicidade28', 'assire1052@hotmail.com:Spaceman1052.', 'doghog42@outlook.com:justpray25', 'elsomacedo@outlook.com.br:Qpwo0910#',
-        'javier-oliver@hotmail.com:internet1989', 'kelvin.a.azevedo@hotmail.com:Kelvin94159@', 'genaro.castillo.gcc22@hotmail.com:Castillo9898%', 'camila_peruchi@hotmail.com:Camila.20', 
-        'juniorharper07@outlook.com:P2b6p7b8', 'alberthmuniz20@hotmail.com:23031996Al1996@@', 'duncmaybury@hotmail.com:Rupert2009', 'mxdzfn@outlook.com:fortniteaccount1234']
-
 threads  = []
 
 start =  time.time()
