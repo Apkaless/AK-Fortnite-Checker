@@ -77,7 +77,7 @@ toomany = []
 
 def check(line):
     global ms_hits, spam, total_lines, checked, failed
-    windll.kernel32.SetConsoleTitleW(f'AK - v2 - Checked: {checked}/{total_lines} - Failed: {failed} - MS-HIT: {ms_hits} - Spam: {spam}')
+    windll.kernel32.SetConsoleTitleW(f'AK - V.2 - Checked: {checked}/{total_lines} - Failed: {failed} - MS-HIT: {ms_hits} - Retries: {spam}')
     user = line.split(':')[0].strip()
     password = line.split(':')[1].strip()
     folder = 'Results'
