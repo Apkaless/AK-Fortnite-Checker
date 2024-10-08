@@ -147,6 +147,7 @@ def check(line):
         toomany.append(line)
         # print(f'{red}[SPAM] - {white}{line}{rescolor}')
         spam += 1
+        checked += 1
         return
 
     r = response
