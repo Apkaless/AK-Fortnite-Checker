@@ -151,7 +151,6 @@ def check(line):
                 spam += 1
                 return
         except:
-            print('Line 155')
             continue
         break
 
@@ -238,7 +237,6 @@ def check(line):
                     checked +=1
                     return
             except:
-                print('Line 242')
                 continue
 
         parsed_url = urllib.parse.urlparse(response.url)
@@ -299,7 +297,6 @@ def check(line):
                 response = scraper.post(url, json=payload, headers=headers, cookies=response.cookies)
                 break
             except:
-                print('Line 303')
                 continue
 
         if 'message":"Two-Factor authentication' in response.text :
@@ -411,7 +408,6 @@ def check(line):
                     url = response.headers['location']
                     break
             except:
-                print('Line 415')
                 continue
 
         headers = {
