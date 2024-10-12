@@ -875,6 +875,16 @@ def check(line):
                             checked +=1
                             return
 
+def emails_extractor(combo_file):
+    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|live.fr|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
+    acc_list = []
+    with open(f'combo/{combo_file}', 'r', encoding='utf8', errors='ignore') as f:
+        content = f.readlines()
+        for em in content:
+            emai = re.match(emails_regex, em)
+            if emai:
+                acc_list.append(emai.group())
+    return acc_list
 
 def banner():
     
@@ -897,32 +907,34 @@ def main():
     combo_file = os.listdir('combo')
     if combo_file:
         combo = combo_file[-1]
-        with open(f'combo/{combo}', 'r', encoding='utf8', errors='ignore') as f:
-            accs = f.read().strip().splitlines()
-            clean_accs = list(dict().fromkeys(accs))
-            total_lines = len(clean_accs)
-            print(f'Loaded Combo: {total_lines}\n{rescolor}')
-            for acc in clean_accs:
-                th = Thread(target=check, args=(acc,))
-                threads.append(th)
-                # time.sleep(0.002)
-                th.start()
-            for th in threads:
-                th.join()
+        accs = emails_extractor(combo)
+        clean_accs = list(dict().fromkeys(accs))
+        total_lines = len(clean_accs)
+        print(f'Loaded Combo: {total_lines}\n{rescolor}')
+        # with open('cleaned_combo.txt', 'a', encoding='utf8', errors='ignore') as f:
+        #     for acc in clean_accs:
+        #         f.write(acc + '\n')
+        for acc in clean_accs:
+            th = Thread(target=check, args=(acc,))
+            threads.append(th)
+            # time.sleep(0.002)
+            th.start()
+        for th in threads:
+            th.join()
         
-            while True:
-                if len(toomany) > 0:
-                    # print(f'\nRemaining Accounts - {blue}({len(toomany)}){white} - Checking Them\n')
-                    for acc in toomany:
-                        toomany.remove(acc)
-                        th = Thread(target=check, args=(acc,))
-                        threads2.append(th)
-                        th.start()
-                        # time.sleep(0.002)
-                    for th in threads2:
-                        th.join()
-                else:
-                    break
+        while True:
+            if len(toomany) > 0:
+                # print(f'\nRemaining Accounts - {blue}({len(toomany)}){white} - Checking Them\n')
+                for acc in toomany:
+                    toomany.remove(acc)
+                    th = Thread(target=check, args=(acc,))
+                    threads2.append(th)
+                    th.start()
+                    # time.sleep(0.002)
+                for th in threads2:
+                    th.join()
+            else:
+                break
     else:
         print(f'\n{red}No Combo File Found{white}\n')
         input('')
