@@ -368,7 +368,7 @@ def check(line):
         response = scraper.get(url, headers=headers, cookies=response2.cookies)
         if 'Sorry, your account has too many active logins' in response.text:
                 print(f'{green}[HIT-NC] - {white}{line}{rescolor}')
-                if not os.path.exists(folder + '/2FA'):
+                if not os.path.exists(folder + '/NoCapture'):
                     os.makedirs(folder + '/NoCapture')
                 open(f'{folder}/NoCapture/all.txt', 'a',
                 encoding='u8').write(f'{line}\n')
