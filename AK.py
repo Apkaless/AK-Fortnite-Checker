@@ -917,10 +917,7 @@ def main():
         clean_accs = list(dict().fromkeys(accs))
         total_lines = len(clean_accs)
         print(f'Loaded Combo: {total_lines}\n{rescolor}')
-        # with open('cleaned_combo.txt', 'a', encoding='utf8', errors='ignore') as f:
-        #     for acc in clean_accs:
-        #         f.write(acc + '\n')
-        with ThreadPoolExecutor(max_workers=50) as executor:
+        with ThreadPoolExecutor(max_workers=30) as executor:
             futures = {executor.submit(check, acc): acc for acc in clean_accs}
             for future in futures:
                 try:
@@ -930,8 +927,7 @@ def main():
 
         while True:
             if len(toomany) > 0:
-                # print(f'\nRemaining Accounts - {blue}({len(toomany)}){white} - Checking Them\n')
-                with ThreadPoolExecutor(max_workers=50) as executor:
+                with ThreadPoolExecutor(max_workers=30) as executor:
                     futures = {executor.submit(check, acc): acc for acc in toomany}
                     for future in futures:
                         try:
