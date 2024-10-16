@@ -76,7 +76,7 @@ def parse_1(text):
     return display_name,country,accid,email_verified_status
 
 def set_cpu_limit():
-    cpus = psutil.cpu_count() // 2
+    cpus = 4 #psutil.cpu_count() // 2
     p = psutil.Process(os.getpid())
     cpus_to_use = []
     for i in range(cpus):
@@ -925,7 +925,7 @@ def main():
         clean_accs = list(dict().fromkeys(accs))
         total_lines = len(clean_accs)
         print(f'Loaded {total_lines} Lines From: {combo}\n{rescolor}')
-        with ThreadPoolExecutor(max_workers=30) as executor:
+        with ThreadPoolExecutor(max_workers=50) as executor:
             futures = {executor.submit(check, acc): acc for acc in clean_accs}
             for future in futures:
                 try:
@@ -935,7 +935,7 @@ def main():
 
         while True:
             if len(toomany) > 0:
-                with ThreadPoolExecutor(max_workers=30) as executor:
+                with ThreadPoolExecutor(max_workers=50) as executor:
                     futures = {executor.submit(check, acc): acc for acc in toomany}
                     for future in futures:
                         try:
