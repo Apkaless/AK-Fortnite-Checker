@@ -909,6 +909,7 @@ def banner():
 {green}██╔══██║██╔═██╗     ██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗
 {lgreen}██║  ██║██║  ██╗    ╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║
 {lgreen}╚═╝  ╚═╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+                            @apkaless
 ''')
 
 threads  = []
@@ -924,7 +925,7 @@ def main():
         accs = emails_extractor(combo)
         clean_accs = list(dict().fromkeys(accs))
         total_lines = len(clean_accs)
-        print(f'Loaded Combo: {total_lines}\n{rescolor}')
+        print(f'Loaded {total_lines} Lines From: {combo}\n{rescolor}')
         with ThreadPoolExecutor(max_workers=30) as executor:
             futures = {executor.submit(check, acc): acc for acc in clean_accs}
             for future in futures:
