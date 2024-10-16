@@ -890,7 +890,7 @@ def check(line):
                             return
 
 def emails_extractor(combo_file):
-    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com|hotmail.es|msn.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
+    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(freenet.de|wp.pl|interia.pl|t-online.de|live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com|hotmail.es|msn.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
     acc_list = []
     with open(f'combo/{combo_file}', 'r', encoding='utf8', errors='ignore') as f:
         content = f.readlines()
