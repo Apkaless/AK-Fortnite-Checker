@@ -452,7 +452,6 @@ def check(line):
                     print(response.url)
                     break
             except:
-                print('Line 445')
                 continue
         
         while True:
