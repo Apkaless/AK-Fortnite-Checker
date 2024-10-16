@@ -76,8 +76,12 @@ def parse_1(text):
     return display_name,country,accid,email_verified_status
 
 def set_cpu_limit():
+    cpus = psutil.cpu_count() // 2
     p = psutil.Process(os.getpid())
-    p.cpu_affinity([0,1,2,3,4])
+    cpus_to_use = []
+    for i in range(cpus):
+        cpus_to_use.append(i)
+    p.cpu_affinity(cpus_to_use)
     
             
 skins_data = []
