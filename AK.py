@@ -10,6 +10,7 @@ from colorama import Fore, init
 from ctypes import windll
 import random
 import string
+import psutil
 
 def prints(line):
     print(f'{line}')
@@ -74,6 +75,10 @@ def parse_1(text):
         email_verified_status = 'Unknown'
     return display_name,country,accid,email_verified_status
 
+def set_cpu_limit():
+    p = psutil.Process(os.getpid())
+    p.cpu_affinity([0,1,2,3,4])
+    
             
 skins_data = []
 sellerstuff = []
@@ -882,7 +887,7 @@ def check(line):
                             return
 
 def emails_extractor(combo_file):
-    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|live.fr|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com|hotmail.es|msn.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
+    emails_regex = r'[a-zA-Z0-9\.+_?!$%#^&*()=?\\|,-]+@+(live.co.uk|live.fr|live.com|outlook.co.uk|hotmail.co.uk|hotmail.fr|outlook.fr|outlook.com|hotmail.com|outlook.com.br|hotmail.com.br|outlook.it|hotmail.it|gmail.com|yahoo.com|online-de.com|hotmail.es|msn.com)+:+[a-zA-Z0-9\.-_=+!@#$%^&*()<>?\\,]+'
     acc_list = []
     with open(f'combo/{combo_file}', 'r', encoding='utf8', errors='ignore') as f:
         content = f.readlines()
@@ -962,5 +967,6 @@ if __name__ == '__main__':
     checked = 0
     check_combo_folder()
     banner()
+    set_cpu_limit()
     main()
     input(f'\n{blue}Checker Finished.... ')
