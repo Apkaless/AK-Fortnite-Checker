@@ -797,9 +797,8 @@ def check(line):
                             (f'[B:{total_backpacks}]' if int(total_backpacks) > 0 else '') +
                             f'[OG:{isOG}]' + 
                             f' - {white}{line}{rescolor}' + 
-                            (f' - {lgreen}[Exclusive Skins: ({len(exclusiveSkin)}) {[i for i in exclusiveSkin]}]' if len(exclusiveSkin) > 0 else '')
-                            )
-
+                            (f' - {lgreen}[Exclusive Skins: ({len(exclusiveSkin)}) {[i for i in exclusiveSkin]}]' if len(exclusiveSkin) > 0 else f' - {lgreen}[First Season: {str(first_active_season)}]'))
+                            
                             fullAccess = 'NFA'
                             outlook_domains = ["hotmail.com", "outlook.com", "hotmail.fr", "outlook.fr", "live.com", "live.fr", "hotmail.com.br", "outlook.com.br", "hotmail.it", "outlook.it", "outlook.co.uk", "hotmail.co.uk"]
                             if epicEmail.lower() == user.lower() and any(domain in user.lower() for domain in outlook_domains):
