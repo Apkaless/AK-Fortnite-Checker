@@ -929,7 +929,8 @@ def main():
         total_lines = len(clean_accs)
         print(f'Loaded {total_lines} Lines From: {combo}\n{rescolor}')
         try:
-            threads_number = int(input(f'{lgreen}[!] How Many Threads To Use (Recomended: 50): '))
+            threads_number = int(input(f'{lgreen}[!] How Many Threads To Use (Recommended: 50): '))
+            print('\n')
         except:
             print(f'{red}[!] Invalid Input')
             time.sleep(2)
