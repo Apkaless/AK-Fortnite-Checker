@@ -930,7 +930,7 @@ def main():
             threads_number = int(input(f'{lgreen}[!] How Many Threads To Use (Recommended: 50): '))
             print('\n')
         except:
-            print(f'{red}[!] Invalid Input')
+            print(f'\n{red}[!] Invalid Input')
             time.sleep(2)
             exit()
         with ThreadPoolExecutor(max_workers=threads_number) as executor:
