@@ -892,8 +892,10 @@ def emails_extractor(combo_file):
     acc_list = []
     with open(f'combo/{combo_file}', 'r', encoding='utf8', errors='ignore') as f:
         content = f.readlines()
+        if len(content) > 30000:
+            content = content[:30000]
         for em in content:
-            emai = re.match(emails_regex, em)
+            emai = re.search(emails_regex, em)
             if emai:
                 acc_list.append(emai.group())
     return acc_list
