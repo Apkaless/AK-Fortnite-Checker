@@ -82,8 +82,33 @@ def set_cpu_limit():
     for i in range(cpus):
         cpus_to_use.append(i)
     p.cpu_affinity(cpus_to_use)
-    
-            
+
+def set_threads(total_lines):
+
+    if total_lines > 500 and total_lines < 700:
+        threads_number = 20
+    elif total_lines > 250 and total_lines < 500:
+        threads_number = 15
+    elif total_lines > 100 and total_lines < 250:
+        threads_number = 10
+    elif total_lines > 50 and total_lines < 100:
+        threads_number = 5
+    elif total_lines > 0 and total_lines < 50:
+        threads_number = 2
+    elif total_lines == 0:
+        print(f'\n{red}[!] No Lines Loaded, Please Check The Combo File')
+        input('')
+        exit()
+    else:
+        try:
+            threads_number = int(input(f'{lgreen}[!] How Many Threads To Use (Recommended: 50): '))
+            print('\n')
+        except:
+            print(f'\n{red}[!] Invalid Input')
+            time.sleep(2)
+            exit()
+    return threads_number
+
 skins_data = []
 sellerstuff = []
 toomany = []
@@ -926,13 +951,7 @@ def main():
         clean_accs = list(dict().fromkeys(accs))
         total_lines = len(clean_accs)
         print(f'Loaded {total_lines} Lines From: {combo}\n{rescolor}')
-        try:
-            threads_number = int(input(f'{lgreen}[!] How Many Threads To Use (Recommended: 50): '))
-            print('\n')
-        except:
-            print(f'\n{red}[!] Invalid Input')
-            time.sleep(2)
-            exit()
+        threads_number = set_threads(total_lines)
         with ThreadPoolExecutor(max_workers=threads_number) as executor:
             futures = {executor.submit(check, acc): acc for acc in clean_accs}
             for future in futures:
@@ -940,7 +959,6 @@ def main():
                     result = future.result()
                 except Exception as e:
                     print(f'{red}Error: {e}{rescolor}')
-
         while True:
             if len(toomany) > 0:
                 with ThreadPoolExecutor(max_workers=threads_number) as executor:
